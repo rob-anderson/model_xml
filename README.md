@@ -35,7 +35,7 @@ Note that (unlike ActiveRecords's to_xml) the field names can be any method in y
       model_xml :full_name, :dob
 
       def full_name
-        "#{first_name} {last+name}"
+        "#{first_name} {last_name}"
       end
     end
 
