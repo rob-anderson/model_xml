@@ -65,7 +65,7 @@ For more complicated setups, you can use block notation like this:
       end
     end
 
-Finally, you can declare named blocks using block notation like this:
+For conditional data sets, you can declare named blocks using block notation like this:
 
     class User < ActiveRecord::Base
       model_xml :first_name, :last_name
@@ -92,6 +92,9 @@ but can be included explicitly - so user.to_xml(:personal_details => true) gives
       <password>foo</password>
       <last_logged_in>2012-04-10</last_logged_in>
     </user>
+
+Finally, if any of the field names return objects which themselves respond to to_xml, then their xml representations will be embedded.  So if you use the name of an active record association, then the child(ren) should be embedded in the xml as you'd expect.
+
 
 Source
 ======
