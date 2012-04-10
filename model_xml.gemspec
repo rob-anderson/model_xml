@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "model_xml"
-  s.version     = '1.0.0'
+  s.version     = '1.0.1'
   s.authors     = "Rob Anderson"
   s.email       = "rob.anderson@paymentcardsolutions.co.uk"
   s.summary     = "Ruby object to xml converter"
