@@ -73,6 +73,9 @@ module ModelXML
       field_list = generate_field_list(options)
 
       xml = options.delete(:builder) || Builder::XmlMarkup.new(:indent => 2)
+      exceptions_list = options.delete(:except) || []
+      limit_list = options.delete(:only)
+
       unless options[:skip_instruct]
         xml.instruct!
       end
@@ -96,13 +99,19 @@ module ModelXML
            raise "ModelXML unable to parse #{field.inspect}"
           end
 
-          # if the content responds to to_xml, call it passing the current builder
-          if content.respond_to?(:to_xml)
-            content.to_xml(options.merge(:builder => xml, :skip_instruct => true, :root => tag.to_s))
-
-          # otherwise create the tag normally
+          # ignore the tag if it is on the exclude list, or if a limit list is provided and it is not on it
+          if exceptions_list.include?(tag) || (limit_list && !limit_list.include?(tag))
+            # do nothing
           else
-            xml.tag! tag, content
+
+            # if the content responds to to_xml, call it passing the current builder
+            if content.respond_to?(:to_xml)
+              content.to_xml(options.merge(:builder => xml, :skip_instruct => true, :root => tag.to_s))
+
+            # otherwise create the tag normally
+            else
+              xml.tag! tag, content
+            end
           end
         end
       end

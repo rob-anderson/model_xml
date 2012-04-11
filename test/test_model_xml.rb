@@ -124,6 +124,21 @@ class ModelXMLTest < Test::Unit::TestCase
     assert_equal res, @t.to_xml
   end
 
+  def test_except_and_include_options
+    TestStruct.instance_eval do
+      model_xml_reset!
+      model_xml :foo, :bar
+    end
+
+    res = '<?xml version="1.0" encoding="UTF-8"?>
+<teststruct>
+  <foo>1</foo>
+</teststruct>
+'
+    assert_equal res, @t.to_xml(:except => [:bar])
+    assert_equal res, @t.to_xml(:only => [:foo])
+
+  end
 
 
 

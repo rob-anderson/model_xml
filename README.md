@@ -29,6 +29,8 @@ Then user.to_xml gives:
       <dob>1970-12-23</dob>
     </user>
 
+Just like ActiveRecord's to_xml method, the :only, :except, and :skip_instruct options are supported.
+
 Note that (unlike ActiveRecords's to_xml) the field names can be any method in your object, not just database columns - eg
 
     class User < ActiveRecord::Base
