@@ -7,6 +7,16 @@ class TestStruct < OpenStruct
   include ModelXML
 end
 
+class Parent < OpenStruct
+  include ModelXML
+  model_xml :foo, :child
+end
+
+class Child < OpenStruct
+  include ModelXML
+  model_xml :bar
+end
+
 class ModelXMLTest < Test::Unit::TestCase
 
   def setup
@@ -78,8 +88,28 @@ class ModelXMLTest < Test::Unit::TestCase
     res = '<teststruct>
   <foo>1</foo>
   <bar>2</bar>
-</teststruct>'
+</teststruct>
+'
     assert_equal res, @t.to_xml(:skip_instruct => true)
 
   end
+
+  def test_embedded_xml
+    p = Parent.new(:foo => 1, :child => Child.new(:bar => 2))
+
+    res = '<?xml version="1.0" encoding="UTF-8"?>
+<parent>
+  <foo>1</foo>
+  <child>
+    <bar>2</bar>
+  </child>
+</parent>
+'
+    assert_equal res, p.to_xml
+  end
+
+
+
+
+
 end

@@ -72,7 +72,7 @@ module ModelXML
 
       field_list = generate_field_list(options)
 
-      xml = Builder::XmlMarkup.new
+      xml = options.delete(:builder) || Builder::XmlMarkup.new(:indent => 2)
       unless options[:skip_instruct]
         xml.instruct!
       end
@@ -96,9 +96,9 @@ module ModelXML
            raise "ModelXML unable to parse #{field.inspect}"
           end
 
-          # if the content implements a to_xml method which returns a non-nil value, insert as raw xml
-          if content.respond_to?(:to_xml) && inline_content = content.to_xml(:skip_instruct => true, :skip_types => true)
-            xml << inline_content
+          # if the content responds to to_xml, call it passing the current builder
+          if content.respond_to?(:to_xml)
+            content.to_xml(options.merge(:builder => xml, :skip_instruct => true))
 
           # otherwise create the tag normally
           else
@@ -107,10 +107,7 @@ module ModelXML
         end
       end
 
-      # builder will screw up the indentation of embedded xml objects, so use nokogiri to format it nicely
-      output = xml.target!.gsub("\n","").gsub("  ","")
-      xml = Nokogiri.parse(output)
-      options[:skip_instruct] ? xml.root.to_s : xml.to_s
+      xml.target!
 
     end
   end
