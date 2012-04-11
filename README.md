@@ -65,6 +65,14 @@ For more complicated setups, you can use block notation like this:
       end
     end
 
+The above relies on method_missing to work - so note that if you are using a ruby reserved method name (like id) for your tag, you may need to use the longer form block notation with the field operator:
+
+    class User < ActiveRecord::Base
+      model_xml do
+        field :id, proc {|u| u.some_other_id_method}
+      end
+    end
+
 For conditional data sets, you can declare named blocks using block notation like this:
 
     class User < ActiveRecord::Base

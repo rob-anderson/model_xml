@@ -18,7 +18,7 @@ module ModelXML
       @field_set = []
     end
 
-    def method_missing *args
+    def field *args
 
       # if the method is called without arguments, add it as a member of the field set
       if args.map(&:class) == [Symbol]
@@ -28,6 +28,11 @@ module ModelXML
       else
         @field_set << args
       end
+
+    end
+
+    def method_missing *args
+      field *args
     end
 
   end

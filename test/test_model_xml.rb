@@ -108,6 +108,21 @@ class ModelXMLTest < Test::Unit::TestCase
     assert_equal res, p.to_xml
   end
 
+  def test_field_operator
+    TestStruct.instance_eval do
+      model_xml_reset!
+      model_xml do
+        field :id, proc {|o| 'foo'}
+      end
+    end
+
+    res = '<?xml version="1.0" encoding="UTF-8"?>
+<teststruct>
+  <id>foo</id>
+</teststruct>
+'
+    assert_equal res, @t.to_xml
+  end
 
 
 
