@@ -98,7 +98,7 @@ module ModelXML
 
           # if the content responds to to_xml, call it passing the current builder
           if content.respond_to?(:to_xml)
-            content.to_xml(options.merge(:builder => xml, :skip_instruct => true))
+            content.to_xml(options.merge(:builder => xml, :skip_instruct => true, :root => tag.to_s))
 
           # otherwise create the tag normally
           else
