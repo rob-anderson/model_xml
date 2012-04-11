@@ -109,7 +109,8 @@ module ModelXML
 
       # builder will screw up the indentation of embedded xml objects, so use nokogiri to format it nicely
       output = xml.target!.gsub("\n","").gsub("  ","")
-      Nokogiri.parse(output).to_s
+      xml = Nokogiri.parse(output)
+      options[:skip_instruct] ? xml.root.to_s : xml.to_s
 
     end
   end

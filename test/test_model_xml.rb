@@ -75,12 +75,10 @@ class ModelXMLTest < Test::Unit::TestCase
       model_xml :foo, :bar
     end
 
-    res = '<?xml version="1.0"?>
-<teststruct>
+    res = '<teststruct>
   <foo>1</foo>
   <bar>2</bar>
-</teststruct>
-'
+</teststruct>'
     assert_equal res, @t.to_xml(:skip_instruct => true)
 
   end
