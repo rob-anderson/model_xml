@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'builder'
 require 'nokogiri'
+require 'facets/string/snakecase'
 require 'model_xml/block_parser'
 
 module ModelXML
@@ -80,7 +81,7 @@ module ModelXML
         xml.instruct!
       end
 
-      xml.tag! object.class.to_s.downcase do
+      xml.tag! object.class.to_s.snakecase do
 
         field_list.each do |field|
 

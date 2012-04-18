@@ -32,9 +32,9 @@ class ModelXMLTest < Test::Unit::TestCase
     assert_equal [[:foo]], TestStruct.model_xml_generator.field_sets
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<teststruct>
+<test_struct>
   <foo>1</foo>
-</teststruct>
+</test_struct>
 '
     assert_equal res, @t.to_xml
   end
@@ -51,10 +51,10 @@ class ModelXMLTest < Test::Unit::TestCase
     assert_equal [[:foo, :bar]], TestStruct.model_xml_generator.field_sets
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<teststruct>
+<test_struct>
   <foo>1</foo>
   <bar>2</bar>
-</teststruct>
+</test_struct>
 '
     assert_equal res, @t.to_xml
   end
@@ -70,11 +70,11 @@ class ModelXMLTest < Test::Unit::TestCase
     end
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<teststruct>
+<test_struct>
   <foo>1</foo>
   <bar>2</bar>
   <foobar>3</foobar>
-</teststruct>
+</test_struct>
 '
     assert_equal res, @t.to_xml
   end
@@ -85,10 +85,10 @@ class ModelXMLTest < Test::Unit::TestCase
       model_xml :foo, :bar
     end
 
-    res = '<teststruct>
+    res = '<test_struct>
   <foo>1</foo>
   <bar>2</bar>
-</teststruct>
+</test_struct>
 '
     assert_equal res, @t.to_xml(:skip_instruct => true)
 
@@ -117,9 +117,9 @@ class ModelXMLTest < Test::Unit::TestCase
     end
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<teststruct>
+<test_struct>
   <id>foo</id>
-</teststruct>
+</test_struct>
 '
     assert_equal res, @t.to_xml
   end
@@ -131,9 +131,9 @@ class ModelXMLTest < Test::Unit::TestCase
     end
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<teststruct>
+<test_struct>
   <foo>1</foo>
-</teststruct>
+</test_struct>
 '
     assert_equal res, @t.to_xml(:except => [:bar])
     assert_equal res, @t.to_xml(:only => [:foo])

@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "model_xml"
-  s.version     = '1.0.5'
+  s.version     = '1.0.9'
   s.authors     = "Rob Anderson"
   s.email       = "rob.anderson@paymentcardsolutions.co.uk"
   s.summary     = "Ruby object to xml converter"
@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/rob-anderson/model_xml"
 
   s.add_dependency 'builder', '>= 2.1.2'
+  s.add_dependency 'facets', '>= 2.9.3'
 
   s.files = `git ls-files`.split("\n")
   s.require_path = "lib"
