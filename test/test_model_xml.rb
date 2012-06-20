@@ -32,9 +32,9 @@ class ModelXMLTest < Test::Unit::TestCase
     assert_equal [[:foo]], TestStruct.model_xml_generator.field_sets
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<test_struct>
+<TestStruct>
   <foo>1</foo>
-</test_struct>
+</TestStruct>
 '
     assert_equal res, @t.to_xml
   end
@@ -51,10 +51,10 @@ class ModelXMLTest < Test::Unit::TestCase
     assert_equal [[:foo, :bar]], TestStruct.model_xml_generator.field_sets
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<test_struct>
+<TestStruct>
   <foo>1</foo>
   <bar>2</bar>
-</test_struct>
+</TestStruct>
 '
     assert_equal res, @t.to_xml
   end
@@ -70,11 +70,11 @@ class ModelXMLTest < Test::Unit::TestCase
     end
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<test_struct>
+<TestStruct>
   <foo>1</foo>
   <bar>2</bar>
   <foobar>3</foobar>
-</test_struct>
+</TestStruct>
 '
     assert_equal res, @t.to_xml
   end
@@ -85,10 +85,10 @@ class ModelXMLTest < Test::Unit::TestCase
       model_xml :foo, :bar
     end
 
-    res = '<test_struct>
+    res = '<TestStruct>
   <foo>1</foo>
   <bar>2</bar>
-</test_struct>
+</TestStruct>
 '
     assert_equal res, @t.to_xml(:skip_instruct => true)
 
@@ -98,12 +98,12 @@ class ModelXMLTest < Test::Unit::TestCase
     p = Parent.new(:foo => 1, :child => Child.new(:bar => 2))
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<parent>
+<Parent>
   <foo>1</foo>
-  <child>
+  <Child>
     <bar>2</bar>
-  </child>
-</parent>
+  </Child>
+</Parent>
 '
     assert_equal res, p.to_xml
   end
@@ -117,9 +117,9 @@ class ModelXMLTest < Test::Unit::TestCase
     end
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<test_struct>
+<TestStruct>
   <id>foo</id>
-</test_struct>
+</TestStruct>
 '
     assert_equal res, @t.to_xml
   end
@@ -131,9 +131,9 @@ class ModelXMLTest < Test::Unit::TestCase
     end
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
-<test_struct>
+<TestStruct>
   <foo>1</foo>
-</test_struct>
+</TestStruct>
 '
     assert_equal res, @t.to_xml(:except => [:bar])
     assert_equal res, @t.to_xml(:only => [:foo])

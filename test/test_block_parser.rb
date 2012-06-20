@@ -16,7 +16,7 @@ class BlockParserTest < Test::Unit::TestCase
     block = Proc.new do
       field :id, 2
     end
-    assert_equal [[:id, 2]], ModelXML::BlockParser.parse(&block).inspect
+    assert_equal [[:id, 2]], ModelXML::BlockParser.parse(&block)
   end
 
 end

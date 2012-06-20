@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'builder'
 require 'nokogiri'
-require 'facets/string/snakecase'
 require 'model_xml/block_parser'
 
 module ModelXML
@@ -81,7 +80,11 @@ module ModelXML
         xml.instruct!
       end
 
-      xml.tag! object.class.to_s.snakecase do
+      root_node = object.class.to_s
+      root_node = root_node.demodulize if root_node.respond_to?(:demodulize) # Rails only
+      root_node = root_node.underscore if root_node.respond_to?(:underscore) # Rails only
+
+      xml.tag! root_node do
 
         field_list.each do |field|
 
@@ -107,7 +110,7 @@ module ModelXML
 
             # if the content responds to to_xml, call it passing the current builder
             if content.respond_to?(:to_xml)
-              content.to_xml(options.merge(:builder => xml, :skip_instruct => true, :root => tag.to_s))
+              content.to_xml(options.merge(:builder => xml, :skip_instruct => true, :root => tag.to_s, :dasherize => false))
 
             # otherwise create the tag normally
             else
