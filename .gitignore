@@ -1,3 +1,4 @@
-*.sw*
-model_xml-1.0.0.gem
+pkg/*
 *.gem
+.bundle
+
