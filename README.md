@@ -105,7 +105,6 @@ but can be included explicitly - so user.to_xml(:personal_details => true) gives
 
 Finally, if any of the field names return objects which themselves respond to to_xml, then their xml representations will be embedded.  So if you use the name of an active record association, then the child(ren) should be embedded in the xml as you'd expect.
 
-
 Source
 ======
 
