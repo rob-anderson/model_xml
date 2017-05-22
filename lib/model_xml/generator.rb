@@ -80,7 +80,7 @@ module ModelXML
         xml.instruct!
       end
 
-      root_node = object.class.to_s
+      root_node = options[:root] || object.class.to_s
       root_node = root_node.demodulize if root_node.respond_to?(:demodulize) # Rails only
       root_node = root_node.underscore if root_node.respond_to?(:underscore) # Rails only
 

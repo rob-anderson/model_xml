@@ -9,7 +9,7 @@ end
 
 class Parent < OpenStruct
   include ModelXML
-  model_xml :foo, :child
+  model_xml :foo, :son
 end
 
 class Child < OpenStruct
@@ -95,14 +95,14 @@ class ModelXMLTest < Test::Unit::TestCase
   end
 
   def test_embedded_xml
-    p = Parent.new(:foo => 1, :child => Child.new(:bar => 2))
+    p = Parent.new(:foo => 1, :son => Child.new(:bar => 2))
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
 <Parent>
   <foo>1</foo>
-  <Child>
+  <son>
     <bar>2</bar>
-  </Child>
+  </son>
 </Parent>
 '
     assert_equal res, p.to_xml
