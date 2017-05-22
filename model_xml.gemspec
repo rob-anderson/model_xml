@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "model_xml"
-  s.version     = '1.0.13'
+  s.version     = '1.0.14'
   s.authors     = "Rob Anderson"
   s.platform    = Gem::Platform::RUBY
   s.email       = "rob.anderson@paymentcardsolutions.co.uk"
