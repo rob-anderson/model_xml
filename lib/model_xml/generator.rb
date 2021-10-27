@@ -5,11 +5,10 @@ require 'model_xml/block_parser'
 
 module ModelXML
   class Generator
-
     attr_reader :field_sets
 
     def initialize
-      @field_sets ||= []
+      @field_sets ||= [].to_set
     end
 
     # three types of argument list are expected:
@@ -48,9 +47,8 @@ module ModelXML
     end
 
     # apply any options to the default field sets to generate a single array of fields
-    def generate_field_list options={}
-
-      field_list = []
+    def generate_field_list(options = {})
+      field_list = [].to_set
       @field_sets.each do |field_set|
 
         # if the field set is a hash then it is a hash of conditional field sets
