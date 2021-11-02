@@ -29,7 +29,24 @@ class ModelXMLTest < Test::Unit::TestCase
       model_xml :foo
     end
 
-    assert_equal [[:foo]], TestStruct.model_xml_generator.field_sets
+    assert_equal [[:foo]].to_set, TestStruct.model_xml_generator.field_sets
+
+    res = '<?xml version="1.0" encoding="UTF-8"?>
+<TestStruct>
+  <foo>1</foo>
+</TestStruct>
+'
+    assert_equal res, @t.to_xml
+  end
+
+  def test_class_simple_duplicates
+    TestStruct.instance_eval do
+      model_xml_reset!
+      model_xml :foo
+      model_xml :foo
+    end
+
+    assert_equal [[:foo]].to_set, TestStruct.model_xml_generator.field_sets
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
 <TestStruct>
@@ -48,7 +65,31 @@ class ModelXMLTest < Test::Unit::TestCase
       end
     end
 
-    assert_equal [[:foo, :bar]], TestStruct.model_xml_generator.field_sets
+    assert_equal [%i[foo bar].to_set].to_set, TestStruct.model_xml_generator.field_sets
+
+    res = '<?xml version="1.0" encoding="UTF-8"?>
+<TestStruct>
+  <foo>1</foo>
+  <bar>2</bar>
+</TestStruct>
+'
+    assert_equal res, @t.to_xml
+  end
+
+  def test_block_notation_duplicates
+    TestStruct.instance_eval do
+      model_xml_reset!
+      model_xml do
+        foo
+        bar
+      end
+      model_xml do
+        foo
+        bar
+      end
+    end
+
+    assert_equal [%i[foo bar].to_set].to_set, TestStruct.model_xml_generator.field_sets
 
     res = '<?xml version="1.0" encoding="UTF-8"?>
 <TestStruct>
@@ -65,7 +106,32 @@ class ModelXMLTest < Test::Unit::TestCase
       model_xml do
         foo
         bar
-        foobar Proc.new {|obj| obj.foo + obj.bar}
+        foobar proc { |obj| obj.foo + obj.bar }
+      end
+    end
+
+    res = '<?xml version="1.0" encoding="UTF-8"?>
+<TestStruct>
+  <foo>1</foo>
+  <bar>2</bar>
+  <foobar>3</foobar>
+</TestStruct>
+'
+    assert_equal res, @t.to_xml
+  end
+
+  def test_inline_procs_duplicate
+    TestStruct.instance_eval do
+      model_xml_reset!
+      model_xml do
+        foo
+        bar
+        foobar proc { |obj| obj.foo + obj.bar }
+      end
+      model_xml do
+        foo
+        bar
+        foobar proc { |obj| obj.foo + obj.bar }
       end
     end
 
@@ -90,8 +156,21 @@ class ModelXMLTest < Test::Unit::TestCase
   <bar>2</bar>
 </TestStruct>
 '
-    assert_equal res, @t.to_xml(:skip_instruct => true)
+    assert_equal res, @t.to_xml(skip_instruct: true)
+  end
 
+  def test_skip_instruct_duplicate
+    TestStruct.instance_eval do
+      model_xml_reset!
+      model_xml :foo, :bar
+      model_xml :foo, :bar
+    end
+
+    res = "<TestStruct>
+  <foo>1</foo>
+  <bar>2</bar>
+</TestStruct>\n"
+    assert_equal res, @t.to_xml(skip_instruct: true)
   end
 
   def test_embedded_xml
@@ -124,6 +203,25 @@ class ModelXMLTest < Test::Unit::TestCase
     assert_equal res, @t.to_xml
   end
 
+  def test_field_operator_duplicates
+    TestStruct.instance_eval do
+      model_xml_reset!
+      model_xml do
+        field :id, proc { |_o| 'foo' }
+      end
+      model_xml do
+        field :id, proc { |_o| 'foo' }
+      end
+    end
+
+    res = '<?xml version="1.0" encoding="UTF-8"?>
+<TestStruct>
+  <id>foo</id>
+</TestStruct>
+'
+    assert_equal res, @t.to_xml
+  end
+
   def test_except_and_include_options
     TestStruct.instance_eval do
       model_xml_reset!
@@ -140,6 +238,19 @@ class ModelXMLTest < Test::Unit::TestCase
 
   end
 
+  def test_except_and_include_options_duplicates
+    TestStruct.instance_eval do
+      model_xml_reset!
+      model_xml :foo, :bar, :foo
+      model_xml :foo, :bar, :foo
+    end
 
-
+    res = '<?xml version="1.0" encoding="UTF-8"?>
+<TestStruct>
+  <foo>1</foo>
+</TestStruct>
+'
+    assert_equal res, @t.to_xml(except: [:bar])
+    assert_equal res, @t.to_xml(only: [:foo])
+  end
 end

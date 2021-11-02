@@ -1,3 +1,5 @@
+require 'set'
+
 module ModelXML
   class BlockParser
 
@@ -15,7 +17,7 @@ module ModelXML
     attr_reader :field_set
 
     def initialize
-      @field_set = []
+      @field_set = [].to_set
     end
 
     def field *args

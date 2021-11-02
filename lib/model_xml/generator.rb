@@ -2,6 +2,8 @@ require 'rubygems'
 require 'builder'
 require 'nokogiri'
 require 'model_xml/block_parser'
+require 'set'
+require 'sourcify'
 
 module ModelXML
   class Generator
@@ -33,17 +35,48 @@ module ModelXML
 
       # if the argument list is empty and we have a block, it is an unnamed block
       if args.empty? && block_given?
-        @field_sets << ModelXML::BlockParser.parse(&block)
+        @field_sets << ModelXML::BlockParser.parse(&block) unless array_already_contains_object?(@field_sets,
+                                                                                                 ModelXML::BlockParser.parse(&block))
 
       # otherwise if the argument list is a symbol and we have a block, it is a named block
       elsif args.map(&:class) == [Symbol] && block_given?
         name = args[0]
-        @field_sets << {name => ModelXML::BlockParser.parse(&block)}
+        @field_sets << { name => ModelXML::BlockParser.parse(&block) } unless array_already_contains_object?(
+          @field_sets, { name => ModelXML::BlockParser.parse(&block) }
+        )
 
       # otherwise assume it is a simple fieldset expressed as symbols
       else
         @field_sets << args
       end
+    end
+
+    def array_already_contains_object?(arr, obj)
+      arr.any? { |item| are_the_same(item, obj) }
+    end
+
+    def are_the_same(obj1, obj2)
+      if is_set_or_array?(obj1) && is_set_or_array?(obj2)
+        obj1.all? { |item| array_already_contains_object?(obj2, item) }
+      elsif is_hash?(obj1) && is_hash?(obj2)
+        obj1.keys.all? { |key| are_the_same(obj2[key], obj1[key]) }
+      elsif is_proc?(obj1) && is_proc?(obj2)
+        obj1.to_source == obj2.to_source
+      else
+        obj1 == obj2
+      end
+    end
+
+    def is_set_or_array?(obj)
+      [Array, Set].include?(obj.class)
+    end
+
+    def is_hash?(obj)
+      [Hash].include?(obj.class)
+    end
+
+    def is_proc?(obj)
+      [Proc].include?(obj.class)
     end
 
     # apply any options to the default field sets to generate a single array of fields
@@ -71,7 +104,7 @@ module ModelXML
       field_list = generate_field_list(options)
 
       xml = options.delete(:builder) || Builder::XmlMarkup.new(:indent => 2)
-      exceptions_list = options.delete(:except) || []
+      exceptions_list = options.delete(:except) || [].to_set
       limit_list = options.delete(:only)
 
       unless options[:skip_instruct]
